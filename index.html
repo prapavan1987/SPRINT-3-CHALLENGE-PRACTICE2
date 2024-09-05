@@ -50,15 +50,11 @@
         this.ints = ints
       }
 
-      getAll () {
-        return this.ints
-      }
-
-      getEvens () {
-        return this.ints.filter(int => {return int % 2 === 0})
-      }
-
+      getAll () {return this.ints}
+      getEvens () {return this.ints.filter(int => {return int % 2 === 0})}
       getNegatives () {return this.ints.filter(int => int < 0)}
+      getAllSquared () {return this.ints.map(int => int ** 2)}
+      
 
       
       // 🧠 Constructor takes **any** number of arguments, which are integers
