@@ -54,7 +54,10 @@
       getEvens () {return this.ints.filter(int => {return int % 2 === 0})}
       getNegatives () {return this.ints.filter(int => int < 0)}
       getAllSquared () {return this.ints.map(int => int ** 2)}
-      
+      pop () {return this.ints.pop()}
+      push (int) {this.ints.push(int); return this.ints}
+      getEveryNth (n) {return this.ints.filter((_,index) => {return index % n === 0})}
+      getAllReversed () {return [...this.ints].reverse ()}
 
       
       // 🧠 Constructor takes **any** number of arguments, which are integers
@@ -74,6 +77,32 @@
 
     // 👉 CHALLENGE 2 NerfGun
     class NerfGun {
+      constructor (count) {
+        this.count = count;
+        this.safetyOn = true;
+        this.currentAmmo = count;
+      }
+
+      shoot () {
+        if (this.currentAmmo !== 0 && !this.safetyOn) {
+          this.currentAmmo --;
+          return "Bang!";
+        } 
+          return "Click!";
+      }
+
+      reload (num) {
+        if (typeof num !== "number" || num <= 0) {
+          return "Error reloading!"
+        } 
+        const maxCapacity = this.count - this.currentAmmo;
+        (num > maxCapacity) ? this.currentAmmo = this.count : this.currentAmmo += num;
+        return `${this.currentAmmo} projectiles left!`
+      }
+      toggleSafety () {
+        this.safetyOn = !this.safetyOn;
+        return this.safetyOn ? 'Safety enabled!' : 'Safety disabled!'
+      }
       // 🧠 Constructor takes one argument: the total number of projectiles supported by the instance
       // 🧠 New instances initialize fully loaded and with the safety on
       // 🧠 Instances have a `shoot` method that takes no arguments:
@@ -92,6 +121,22 @@
 
     // 👉 CHALLENGE 3 EBook
     class EBook {
+      constructor (str, char) {
+        this.str = str;
+        this.char = char;
+        this.currentPage = 0;
+      }
+      next () {
+       const start = this.currentPage * this.char;
+       const end = start + this.char;
+
+       const pageContent = this.str.slice(start, end)
+       if (pageContent === '') {
+        return null
+       }
+       this.currentPage++
+       return pageContent
+      }
       // 🧠 Constructor takes two arguments:
       //      * First arg is a string with the whole text of the book
       //      * Second arg is the number of characters contained in a single page of the book
@@ -111,6 +156,41 @@
 
     // 👉 CHALLENGE 4 AntFarm
     class AntFarm {
+      constructor (...str) {
+        this.ants = str.map(name => {return {name, health: 100}});
+      }
+
+      // work () {
+      //   this.ants = this.ants.map(ant => {return {...ant, health: ant.health - 20}}).filter(ant => ant.health > 0);
+      //   return (!this.ants.length) ? "No ants here. Did you work them to death?" : `${this.ants.length} ants starting work!`
+      // }
+      work() {
+          let numOfAnts = this.ants.length;
+          if (!numOfAnts) {
+            return "No ants here. Did you work them to death?";
+          }
+          this.ants = this.ants
+            .map((ant) => ({
+              ...ant,
+              health: ant.health - 20,
+            }))
+            .filter((ant) => ant.health > 0);
+          return `${numOfAnts} ants starting work!`;
+        }
+
+      feed (name) {
+        let antFound = false;
+
+        this.ants = this.ants.map (ant => {
+          if (ant.name === name) {
+            antFound = true;
+            return {...ant, health: ant.health + 15};
+          } 
+          return ant
+        })
+        return antFound ? 'Yum!' : `${name} not found!`
+      }
+
       // 🧠 Constructor takes **any** number of arguments, which are strings: the names of your ants
       // 🧠 Instances of AntFarm have an `ants` property holding an array of ants:
       //      * Each ant is an object with a `name` prop and a `health` prop that starts at 100
